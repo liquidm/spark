@@ -1,7 +1,7 @@
 image: eu.gcr.io/ligatus-prod-public-registry/generic-build-agent:latest
 
 variables:
-  ARTIFACT_DIR: "bin"
+  ARTIFACT: "artifact.tar.gz"
 
 stages:
   - build
@@ -11,6 +11,6 @@ build:
   script:
   - rm -f ~/.m2/settings.xml
   - build/mvn -DskipTests clean package --quiet
-  - tar -zcvf ${ARTIFACT_DIR}.tar.gz $ARTIFACT_DIR
-  - gsutil -m cp ${ARTIFACT_DIR}.tar.gz gs://lqm-artifact/${CI_PROJECT_NAME}/${CI_COMMIT_SHA}
-
+  - cd ${CI_PROJECT_DIR}/..
+  - tar -zcf ${CI_PROJECT_DIR}/../${ARTIFACT} ${CI_PROJECT_NAME}
+  - gsutil -m cp ${CI_PROJECT_DIR}/../${ARTIFACT} gs://lqm-artifact/${CI_PROJECT_NAME}/${CI_COMMIT_SHA}
