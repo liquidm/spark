@@ -10,7 +10,7 @@ build:
   stage: build
   script:
   - rm -f ~/.m2/settings.xml
-  - build/mvn -DskipTests clean package --quiet
+  - build/mvn -Pyarn -Phadoop-2.7 -Dhadoop.version=2.7.7 -DskipTests clean package --quiet
   - cd ${CI_PROJECT_DIR}/..
   - tar -zcf ${CI_PROJECT_DIR}/../${ARTIFACT} ${CI_PROJECT_NAME}
   - gsutil -m cp ${CI_PROJECT_DIR}/../${ARTIFACT} gs://lqm-artifact/${CI_PROJECT_NAME}/${CI_COMMIT_SHA}
